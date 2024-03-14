@@ -4,31 +4,144 @@ body, html {
     height: 100%;
     font-family: Arial, sans-serif;
 }
-
-.body-content {
+.random-anime {
     position: relative;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.8); /* Blanc avec transparence */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.body-content * {
-    margin: 10px;
-}
-
-/* Applique l'image de fond avec une couverture complète et un peu de flou pour l'esthétique */
-.bg-image {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background-image: url('{{.MainImageURL}}');
+    height: 50vh;
+    color: white;
+    background-image: url('{{.RandomAnime.MainImageURL}}');
     background-size: cover;
     background-position: center;
-    filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.random-anime::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5); /* Dark overlay for better readability */
+}
+.random-anime * {
+    position: relative;
+    z-index: 1;
+}
+
+.anime-item {
+    flex: 0 0 auto;
+    margin-right: 20px;
+    text-align: center;
+}
+.anime-item img {
+    width: 100px;
+    height: auto;
+    display: block;
+    margin: auto;
+}
+#bg-image {
+    object-fit: cover; /* Couvre toute la zone de la div */
+    opacity: 0.5; /* Réglage de la transparence */
+}
+
+.random-anime-container {
+    position: relative;
+    width: 100%;
+    height: 55%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    text-align: center;
+    color: white; /* Couleur du texte */
+}
+
+.random-anime-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Assurez-vous que l'image couvre la zone */
+    filter: blur(3px); /* Flou de fond pour l'esthétique */
+    opacity: 0.7; /* Transparence pour que le texte ressorte */
     z-index: -1;
+}
+
+.random-anime-content {
+    position: relative;
+    max-width: 60%; /* Largeur maximale du contenu */
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.6); /* Fond semi-transparent pour la lisibilité */
+    border-radius: 8px; /* Coins arrondis pour le contenu */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre pour le relief */
+}
+
+.random-anime-title {
+    font-size: 2em; /* Taille du titre */
+    margin-bottom: 0.5em;
+}
+
+.random-anime-synopsis {
+    font-size: 1em; /* Taille du synopsis */
+    line-height: 1.5;
+}
+
+
+
+
+
+.recent-animes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.anime-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.anime-card {
+    flex-basis: 50%; /* Each card takes up 50% of the container width */
+    box-sizing: border-box; /* Include padding and border in the width */
+    padding: 10px; /* Adjust as needed */
+}
+
+.anime-card img {
+    max-width: 100%;
+    height: auto;
+}
+
+.anime-card-content {
+    padding: 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+}
+
+.anime-card-title {
+    font-weight: bold;
+}
+
+
+
+.pagination-info {
+    text-align: center;
+    margin-top: 20px; /* Adjust margin as needed */
+}
+
+.pagination-button {
+    padding: 8px 16px; /* Adjust padding as needed */
+    margin: 0 5px; /* Adjust margin as needed */
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.pagination-button:hover {
+    background-color: #45a049;
 }

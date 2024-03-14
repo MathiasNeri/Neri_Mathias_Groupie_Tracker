@@ -1,29 +1,52 @@
+{{define "index"}}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>{{.Title}}</title>
-    <style>
-        /* Le CSS modifié vient ici */
-    </style>
+    <title>Anime Display</title>
+    <link rel="stylesheet" href="/static/style/index.css">
 </head>
+
 <body>
-    <div class="bg-image">
-        <img src="{{.MainImageURL}}" alt="{{.Title}}">
-    </div> <!-- Fond avec l'image de l'anime -->
-    <div class="body-content">
-        <h1>{{.Title}}</h1>
-        <p class="anime-synopsis">{{.SynopsisOrDefault}}</p>
-        <div class="anime-genres">
-            <strong>Genres:</strong>
-            <ul>
-                {{range .Genres}}
-                    <li>{{.Name}}</li>
-                {{end}}
-            </ul>
+    <div class="random-anime-container">
+        <img class="random-anime-background" src="{{.RandomAnime.LargeImageURL}}" alt="{{.RandomAnime.Title}}" />
+        <div class="random-anime-content">
+            <h1 class="random-anime-title">{{.RandomAnime.Title}}</h1>
+            <p class="random-anime-synopsis">{{.RandomAnime.SynopsisOrDefault}}</p>
         </div>
     </div>
+    <div class="recent-animes">
+        <div class="anime-list">
+            {{range .RecentAnimes.Data}}
+            <div class="anime-card">
+                <img src="{{.MainImageURL}}" alt="{{.Title}}">
+                <div class="anime-card-content">
+                    <div class="anime-card-title">{{.Title}}</div>
+                </div>
+            </div>
+            {{end}}
+        </div>
+    </div>
+    <div class="pagination-info">
+        <p>Page: {{.RecentAnimes.Pagination.CurrentPage}}/{{.RecentAnimes.Pagination.LastVisiblePage}}</p>
+        {{if .RecentAnimes.Pagination.HasNextPage}}
+        <a href="/?page={{.Next}}">
+            <button class="pagination-button">Next</button>
+        </a>
+        {{end}}
+        {{if gt .RecentAnimes.Pagination.CurrentPage 1}}
+        <a href="/?page={{.Before}}">
+            <button class="pagination-button">Previous</button>
+        </a>
+        {{end}}
+        <p>Total Number of Animes: {{.RecentAnimes.Pagination.Items.Total}}</p>
+    </div>
+
+
 </body>
+
 </html>
 
-            
+
+{{end}}
