@@ -1,0 +1,34 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
+
+.body-content {
+    position: relative;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8); /* Blanc avec transparence */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.body-content * {
+    margin: 10px;
+}
+
+/* Applique l'image de fond avec une couverture complète et un peu de flou pour l'esthétique */
+.bg-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-image: url('{{.MainImageURL}}');
+    background-size: cover;
+    background-position: center;
+    filter: blur(8px);
+    z-index: -1;
+}

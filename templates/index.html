@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{.Title}}</title>
+    <style>
+        /* Le CSS modifié vient ici */
+    </style>
+</head>
+<body>
+    <div class="bg-image">
+        <img src="{{.MainImageURL}}" alt="{{.Title}}">
+    </div> <!-- Fond avec l'image de l'anime -->
+    <div class="body-content">
+        <h1>{{.Title}}</h1>
+        <p class="anime-synopsis">{{.SynopsisOrDefault}}</p>
+        <div class="anime-genres">
+            <strong>Genres:</strong>
+            <ul>
+                {{range .Genres}}
+                    <li>{{.Name}}</li>
+                {{end}}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
+
+            
