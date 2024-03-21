@@ -13,19 +13,11 @@
         <script>
 
             function searchAnime() {
-                const query = document.getElementById('searchBox').value;
-                if (query) {
-                    // Supposons que vous avez un élément pour afficher les résultats
-                    const resultsContainer = document.getElementById('searchResults');
-                    fetch(`/search?q=${encodeURIComponent(query)}`)
-                        .then(response => response.text())
-                        .then(html => {
-                            resultsContainer.innerHTML = html;
-                        })
-                        .catch(error => {
-                            console.error('Erreur lors de la recherche:', error);
-                            resultsContainer.innerHTML = `<p class="error-message">Erreur de recherche : ${error}</p>`;
-                        });
+                console.log('toto');
+                const searchBox = document.querySelector('.searchInput');
+                const query = searchBox.value;
+                if (query.trim()) {
+                    window.location.href = `/search?q=${encodeURIComponent(query)}`;
                 } else {
                     alert('Veuillez entrer un terme de recherche.');
                 }
