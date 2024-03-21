@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	inittemplate "groupie/templates"
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 )
@@ -168,4 +169,32 @@ type AnimeResponse struct {
 		} `json:"items"`
 	} `json:"pagination"`
 	Data []AnimeInfo `json:"data"`
+}
+
+func SearchAnimeHandler(w http.ResponseWriter, r *http.Request) {
+	query := r.URL.Query().Get("q")
+	if query == "" {
+		http.Error(w, "Query is required", http.StatusBadRequest)
+		return
+	}
+
+	// Faites une requête à l'API Jikan avec la chaîne de recherche
+	resp, err := http.Get("https://api.jikan.moe/v4/anime?q=" + url.QueryEscape(query) + "&page=1")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer resp.Body.Close()
+
+	var result struct {
+		Data []AnimeInfo `json:"data"`
+	}
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Utilisez un template pour afficher les résultats de la recherche
+
+	inittemplate.Temp.ExecuteTemplate(w, "result_search", result.Data)
 }
