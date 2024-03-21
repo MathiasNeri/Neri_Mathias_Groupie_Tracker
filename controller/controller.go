@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/json"
+	"fmt"
 	inittemplate "groupie/templates"
 	"net/http"
 	"net/url"
@@ -171,30 +172,54 @@ type AnimeResponse struct {
 	Data []AnimeInfo `json:"data"`
 }
 
+type Pagination struct {
+	LastVisiblePage int  `json:"last_visible_page"`
+	HasNextPage     bool `json:"has_next_page"`
+	CurrentPage     int  `json:"current_page"`
+}
+
+type AnimeSearchResult struct {
+	Query      string
+	Results    []AnimeInfo
+	Pagination Pagination
+}
+
 func SearchAnimeHandler(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query().Get("q")
+	page := r.URL.Query().Get("page")
 	if query == "" {
 		http.Error(w, "Query is required", http.StatusBadRequest)
 		return
 	}
+	if page == "" {
+		page = "1" // Default to page 1 if no page number is provided
+	}
 
-	// Faites une requête à l'API Jikan avec la chaîne de recherche
-	resp, err := http.Get("https://api.jikan.moe/v4/anime?q=" + url.QueryEscape(query) + "&page=1")
+	url := fmt.Sprintf("https://api.jikan.moe/v4/anime?q=%s&page=%s", url.QueryEscape(query), url.QueryEscape(page))
+	resp, err := http.Get(url)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, "Server error", http.StatusInternalServerError)
+		fmt.Println(err)
 		return
 	}
 	defer resp.Body.Close()
 
 	var result struct {
-		Data []AnimeInfo `json:"data"`
+		Data       []AnimeInfo `json:"data"`
+		Pagination Pagination  `json:"pagination"`
 	}
+
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, "Error decoding response", http.StatusInternalServerError)
+		fmt.Println(err)
 		return
 	}
 
-	// Utilisez un template pour afficher les résultats de la recherche
+	data := AnimeSearchResult{
+		Query:      query,
+		Results:    result.Data,
+		Pagination: result.Pagination,
+	}
 
-	inittemplate.Temp.ExecuteTemplate(w, "result_search", result.Data)
+	inittemplate.Temp.ExecuteTemplate(w, "result_search", data)
 }

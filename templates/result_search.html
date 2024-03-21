@@ -6,24 +6,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script type="text/javascript" src="/static/style/search.js"></script>
+    <link rel="stylesheet" href="/static/style/nicolas.css">
+    <script src="/static/style/search.js"></script>
 </head>
 
 <body>
-<script>
-    
-function searchAnime() {
-    console.log('toto');
-    const searchBox = document.querySelector('.searchInput');
-    const query = searchBox.value;
-    if (query.trim()) {
-        window.location.href = `/search?q=${encodeURIComponent(query)}`;
-    } else {
-        alert('Veuillez entrer un terme de recherche.');
-    }
-}
-</script>
-
     <header class="site-header">
         <nav class="navbar">
             <a href="#categories">Category</a>
@@ -74,7 +61,32 @@ function searchAnime() {
     </header>
 
     <section id="searchResults">
+        {{if .}}
+        {{range .}}
+        <div class="card">
+            <h2>{{.Title}}</h2>
+            <img src="{{.Images.Jpg.LargeImageURL}}" alt="{{.Title}}">
+            <p><strong>Genres:</strong>
+                {{range .Genres}}
+                {{.Name}},
+                {{end}}
+            </p>
+            <p><strong>Synopsis:</strong> {{.Synopsis}}</p>
+            <p><strong>Type:</strong> {{.Type}}</p>
+        </div>
+        {{end}}
+        {{else}}
+        <p>No results found.</p>
+        {{end}}
     </section>
+    <div class="pagination">
+        {{if .Pagination.HasNextPage}}
+        <a href="/search?q={{.Query}}&page={{inc .Pagination.CurrentPage}}">Next</a>
+        {{end}}
+        {{if gt .Pagination.CurrentPage 1}}
+        <a href="/search?q={{.Query}}&page={{dec .Pagination.CurrentPage}}">Previous</a>
+        {{end}}
+    </div>
 
 </body>
 
