@@ -9,11 +9,12 @@ html {
     padding: 0;
     height: 100%;
     font-family: Arial, sans-serif;
+    padding-top: 1vh;
+    background-color: #778899;
 }
 
 .random-anime {
     position: relative;
-    height: 50vh;
     color: white;
     background-image: url('{{.RandomAnime.MainImageURL}}');
     background-size: cover;
@@ -22,6 +23,7 @@ html {
     justify-content: center;
     align-items: center;
     text-align: center;
+
 }
 
 .random-anime::after {
@@ -45,13 +47,16 @@ html {
 .random-anime-container {
     position: relative;
     width: 100%;
-    height: 55%;
+    min-height: 55vh; /* Hauteur minimale pour s'assurer qu'il ait toujours une certaine taille */
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
     text-align: center;
     color: white;
+    margin-top: 9vh;
+    border-radius: 15px;
+
     /* Couleur du texte */
 }
 
@@ -67,7 +72,6 @@ html {
     /* Flou de fond pour l'esthétique */
     opacity: 0.7;
     /* Transparence pour que le texte ressorte */
-    z-index: -1;
 }
 
 .random-anime-content {
@@ -78,9 +82,12 @@ html {
     background: rgba(0, 0, 0, 0.6);
     /* Fond semi-transparent pour la lisibilité */
     border-radius: 8px;
+    margin: 5vh;
     /* Coins arrondis pour le contenu */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     /* Ombre pour le relief */
+    box-sizing: border-box;
+    z-index: 2;
 }
 
 .random-anime-title {
