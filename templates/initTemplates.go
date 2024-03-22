@@ -11,10 +11,10 @@ var Temp *template.Template
 func InitTemplate() {
 	// Création d'une nouvelle instance de template avec les fonctions personnalisées
 	temp := template.New("").Funcs(template.FuncMap{
-		"inc": func(a int) int {
+		"add": func(a int) int {
 			return a + 1
 		},
-		"dec": func(a int) int {
+		"sub": func(a int) int {
 			return a - 1
 		},
 	})

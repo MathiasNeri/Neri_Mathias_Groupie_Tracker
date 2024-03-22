@@ -1,6 +1,12 @@
 
+document.addEventListener('DOMContentLoaded', (event) => {
+    document.getElementById('searchForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // Empêche le formulaire de soumettre de manière traditionnelle
+        searchAnime();
+    });
+});
+
 function searchAnime() {
-    console.log('toto');
     const searchBox = document.querySelector('.searchInput');
     const query = searchBox.value;
     if (query.trim()) {
@@ -9,3 +15,4 @@ function searchAnime() {
         alert('Veuillez entrer un terme de recherche.');
     }
 }
+

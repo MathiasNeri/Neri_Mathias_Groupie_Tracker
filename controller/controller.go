@@ -145,7 +145,8 @@ func getRecentAnimes(page string) (*AnimeResponse, error) {
 
 	var filteredAnimes []AnimeInfo
 	for _, anime := range response.Data {
-		if !isExcludedGenre(&anime, []string{"Hentai"}) {
+		// Check if the anime type is "TV" and it is not an excluded genre
+		if anime.Type == "TV" && !isExcludedGenre(&anime, []string{"Hentai"}) {
 			filteredAnimes = append(filteredAnimes, anime)
 			if len(filteredAnimes) == 25 {
 				break
@@ -195,7 +196,7 @@ func SearchAnimeHandler(w http.ResponseWriter, r *http.Request) {
 		page = "1" // Default to page 1 if no page number is provided
 	}
 
-	url := fmt.Sprintf("https://api.jikan.moe/v4/anime?q=%s&page=%s", url.QueryEscape(query), url.QueryEscape(page))
+	url := fmt.Sprintf("https://api.jikan.moe/v4/anime?q=%s&page=%s&sfw=true", url.QueryEscape(query), url.QueryEscape(page))
 	resp, err := http.Get(url)
 	if err != nil {
 		http.Error(w, "Server error", http.StatusInternalServerError)

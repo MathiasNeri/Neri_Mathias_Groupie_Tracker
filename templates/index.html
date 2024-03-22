@@ -13,7 +13,7 @@
     <header class="site-header">
         <nav class="navbar">
             <a href="#categories">Category</a>
-            <a href="#favorites">Favourites</a>
+            <a href="#favorites">Favorites</a>
             <div class="searchBox">
                 <input class="searchInput" type="text" id="searchBox" placeholder="Recherche...">
                 <button class="searchButton" onclick="searchAnime()">
@@ -52,7 +52,7 @@
                 </button>
             </div>
     </header>
-    
+
     <div class="random-anime-container">
         <img class="random-anime-background" src="{{.RandomAnime.LargeImageURL}}" alt="{{.RandomAnime.Title}}" />
         <div class="random-anime-content">
@@ -63,28 +63,40 @@
     <div class="recent-animes">
         <div class="anime-list">
             {{range .RecentAnimes.Data}}
-            <div class="anime-card">
-                <img src="{{.MainImageURL}}" alt="{{.Title}}">
-                <div class="anime-card-content">
-                    <div class="anime-card-title">{{.Title}}</div>
-                </div>
+            <div class="card">
+                <h2>{{.Title}}</h2>
+                <img src="{{.Images.Jpg.LargeImageURL}}" alt="{{.Title}}">
+                <p><strong>Genres:</strong>
+                    {{range .Genres}}
+                    {{.Name}},
+                    {{end}}
+                </p>
+                <p><strong>Synopsis:</strong> {{.Synopsis}}</p>
+                <p><strong>Type:</strong> {{.Type}}</p>
             </div>
             {{end}}
         </div>
     </div>
-    <div class="pagination-info">
-        <p>Page: {{.RecentAnimes.Pagination.CurrentPage}}/{{.RecentAnimes.Pagination.LastVisiblePage}}</p>
-        {{if .RecentAnimes.Pagination.HasNextPage}}
-        <a href="/?page={{.Next}}">
-            <button class="pagination-button">Next</button>
-        </a>
-        {{end}}
+    <div class="pagination">
         {{if gt .RecentAnimes.Pagination.CurrentPage 1}}
-        <a href="/?page={{.Before}}">
+        <a href="/?page=1">
+            <button class="pagination-button">First</button>
+        </a>
+        <a href="/?page={{.RecentAnimes.Pagination.CurrentPage | sub}}">
             <button class="pagination-button">Previous</button>
         </a>
         {{end}}
-        <p>Total Number of Animes: {{.RecentAnimes.Pagination.Items.Total}}</p>
+    
+        <p>Page: {{.RecentAnimes.Pagination.CurrentPage}}/{{.RecentAnimes.Pagination.LastVisiblePage}}</p>
+    
+        {{if .RecentAnimes.Pagination.HasNextPage}}
+        <a href="/?page={{.RecentAnimes.Pagination.CurrentPage | add}}">
+            <button class="pagination-button">Next</button>
+        </a>
+        <a href="/?page={{.RecentAnimes.Pagination.LastVisiblePage}}">
+            <button class="pagination-button">Last</button>
+        </a>
+        {{end}}
     </div>
 
 

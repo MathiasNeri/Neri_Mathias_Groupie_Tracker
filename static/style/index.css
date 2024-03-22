@@ -1,9 +1,16 @@
-body, html {
+@font-face {
+    font-family: "Heavy";
+    src: url("/static/polices/Mont-HeavyDEMO.otf");
+}
+
+body,
+html {
     margin: 0;
     padding: 0;
     height: 100%;
     font-family: Arial, sans-serif;
 }
+
 .random-anime {
     position: relative;
     height: 50vh;
@@ -16,6 +23,7 @@ body, html {
     align-items: center;
     text-align: center;
 }
+
 .random-anime::after {
     content: '';
     position: absolute;
@@ -23,28 +31,16 @@ body, html {
     right: 0;
     bottom: 0;
     left: 0;
-    background: rgba(0, 0, 0, 0.5); /* Dark overlay for better readability */
+    background: rgba(0, 0, 0, 0.5);
+    /* Dark overlay for better readability */
 }
+
 .random-anime * {
     position: relative;
     z-index: 1;
 }
 
-.anime-item {
-    flex: 0 0 auto;
-    margin-right: 20px;
-    text-align: center;
-}
-.anime-item img {
-    width: 100px;
-    height: auto;
-    display: block;
-    margin: auto;
-}
-#bg-image {
-    object-fit: cover; /* Couvre toute la zone de la div */
-    opacity: 0.5; /* Réglage de la transparence */
-}
+
 
 .random-anime-container {
     position: relative;
@@ -55,7 +51,8 @@ body, html {
     justify-content: center;
     overflow: hidden;
     text-align: center;
-    color: white; /* Couleur du texte */
+    color: white;
+    /* Couleur du texte */
 }
 
 .random-anime-background {
@@ -64,32 +61,39 @@ body, html {
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Assurez-vous que l'image couvre la zone */
-    filter: blur(3px); /* Flou de fond pour l'esthétique */
-    opacity: 0.7; /* Transparence pour que le texte ressorte */
+    object-fit: cover;
+    /* Assurez-vous que l'image couvre la zone */
+    filter: blur(3px);
+    /* Flou de fond pour l'esthétique */
+    opacity: 0.7;
+    /* Transparence pour que le texte ressorte */
     z-index: -1;
 }
 
 .random-anime-content {
     position: relative;
-    max-width: 60%; /* Largeur maximale du contenu */
+    max-width: 60%;
+    /* Largeur maximale du contenu */
     padding: 20px;
-    background: rgba(0, 0, 0, 0.6); /* Fond semi-transparent pour la lisibilité */
-    border-radius: 8px; /* Coins arrondis pour le contenu */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre pour le relief */
+    background: rgba(0, 0, 0, 0.6);
+    /* Fond semi-transparent pour la lisibilité */
+    border-radius: 8px;
+    /* Coins arrondis pour le contenu */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* Ombre pour le relief */
 }
 
 .random-anime-title {
-    font-size: 2em; /* Taille du titre */
+    font-size: 2em;
+    /* Taille du titre */
     margin-bottom: 0.5em;
 }
 
 .random-anime-synopsis {
-    font-size: 1em; /* Taille du synopsis */
+    font-size: 1em;
+    /* Taille du synopsis */
     line-height: 1.5;
 }
-
-
 
 
 
@@ -102,54 +106,101 @@ body, html {
 .anime-list {
     display: flex;
     flex-wrap: wrap;
+    gap: 3vh;
+    padding: 2vh;
+    justify-content: center;
 }
 
-.anime-card {
-    flex-basis: 50%; /* Each card takes up 50% of the container width */
-    box-sizing: border-box; /* Include padding and border in the width */
-    padding: 10px; /* Adjust as needed */
+.card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: calc(33.333% - 20px);
+    margin-bottom: 20px;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.anime-card img {
-    max-width: 100%;
-    height: auto;
-}
-
-.anime-card-content {
-    padding: 10px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-}
-
-.anime-card-title {
-    font-weight: bold;
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 
-
-.pagination-info {
+.card h2 {
+    font-size: 1.2em;
+    margin: 0;
+    padding: 16px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border-radius: 8px 8px 0 0;
+    position: relative;
+    top: -1px;
+    /* Overlaps the image slightly */
     text-align: center;
-    margin-top: 20px; /* Adjust margin as needed */
+}
+
+.card p {
+    padding: 0 16px 16px;
+    margin: 0;
+    line-height: 1.5;
+    color: #666;
+}
+
+.card p strong {
+    color: #333;
+}
+
+.card img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px 8px 0 0;
+    object-fit: cover;
+}
+
+
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px; /* Espacement entre les boutons */
+    margin-top: 5vb; /* Espace au-dessus de la pagination */
+    padding-bottom: 1vb;
 }
 
 .pagination-button {
-    padding: 8px 16px; /* Adjust padding as needed */
-    margin: 0 5px; /* Adjust margin as needed */
-    background-color: #4CAF50;
+    padding: 5px 15px;
+    text-decoration: none;
     color: white;
+    background-color: #007bff;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
 }
 
 .pagination-button:hover {
-    background-color: #45a049;
+    background-color: #0056b3;
 }
 
+.pagination span {
+    padding: 5px 15px;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+}
+
+
 .site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw; /* assurez-vous que l'en-tête prend toute la largeur */
     background-color: #333;
     color: #fff;
-    padding: 10px 20px;
+    padding: 1vh 1vw; /* espace vertical basé sur la hauteur du viewport, espace horizontal basé sur la largeur */
+    z-index: 10; /* assurez-vous que l'en-tête reste au-dessus des autres éléments */
+    border-bottom: 1px solid #fff; /* ajout d'une bordure pour séparer l'en-tête du contenu */
+    box-sizing: border-box; /* assure que le padding est inclus dans la largeur */
+    border-radius: 10px;
 }
 
 .navbar {
@@ -173,9 +224,9 @@ body, html {
     background: #2f3640;
     border-radius: 50px;
     position: relative;
-  }
-  
-  .searchButton {
+}
+
+.searchButton {
     color: white;
     position: absolute;
     right: 8px;
@@ -186,25 +237,27 @@ body, html {
     border: 0;
     display: inline-block;
     transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
-  }
-  /*hover effect*/
-  button:hover {
+}
+
+/*hover effect*/
+button:hover {
     color: #fff;
     background-color: #1A1A1A;
     box-shadow: rgba(0, 0, 0, 0.5) 0 10px 20px;
     transform: translateY(-3px);
-  }
-  /*button pressing effect*/
-  button:active {
+}
+
+/*button pressing effect*/
+button:active {
     box-shadow: none;
     transform: translateY(0);
-  }
-  
-  .searchInput {
+}
+
+.searchInput {
     border: none;
     background: none;
     outline: none;
     color: white;
     font-size: 15px;
-    padding: 24px 46px 24px 26px;
-  }
+    padding: 3vb 
+}
