@@ -11,7 +11,7 @@ func InitServe() {
 
 	FileServer := http.FileServer(http.Dir("static"))
 	http.Handle("/static/", http.StripPrefix("/static/", FileServer))
-	http.HandleFunc("/", controller.IndexHandler)
+	http.HandleFunc("/index", controller.IndexHandler)
 	http.HandleFunc("/result_search", controller.SearchAnimeHandler)
 
 	if err := http.ListenAndServe(controller.Port, nil); err != nil {

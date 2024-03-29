@@ -47,7 +47,8 @@ html {
 .random-anime-container {
     position: relative;
     width: 100%;
-    min-height: 55vh; /* Hauteur minimale pour s'assurer qu'il ait toujours une certaine taille */
+    min-height: 55vh;
+    /* Hauteur minimale pour s'assurer qu'il ait toujours une certaine taille */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -170,8 +171,10 @@ html {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px; /* Espacement entre les boutons */
-    margin-top: 5vb; /* Espace au-dessus de la pagination */
+    gap: 10px;
+    /* Espacement entre les boutons */
+    margin-top: 5vb;
+    /* Espace au-dessus de la pagination */
     padding-bottom: 1vb;
 }
 
@@ -200,14 +203,31 @@ html {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw; /* assurez-vous que l'en-tête prend toute la largeur */
+    width: 100vw;
+    /* assurez-vous que l'en-tête prend toute la largeur */
     background-color: #333;
     color: #fff;
-    padding: 1vh 1vw; /* espace vertical basé sur la hauteur du viewport, espace horizontal basé sur la largeur */
-    z-index: 10; /* assurez-vous que l'en-tête reste au-dessus des autres éléments */
-    border-bottom: 1px solid #fff; /* ajout d'une bordure pour séparer l'en-tête du contenu */
-    box-sizing: border-box; /* assure que le padding est inclus dans la largeur */
+    padding: 1vh 1vw;
+    /* espace vertical basé sur la hauteur du viewport, espace horizontal basé sur la largeur */
+    z-index: 10;
+    /* assurez-vous que l'en-tête reste au-dessus des autres éléments */
+    border-bottom: 1px solid #fff;
+    /* ajout d'une bordure pour séparer l'en-tête du contenu */
+    box-sizing: border-box;
+    /* assure que le padding est inclus dans la largeur */
     border-radius: 10px;
+}
+
+.header-logo {
+    width : 8vh;
+    border-radius: 50%;
+    margin-right: 15px;
+    transition: transform 0.3s ease;
+
+}
+
+.header-logo:hover {
+    transform: scale(1.05); /* Légèrement plus grand lorsque survolé */
 }
 
 .navbar {
@@ -266,5 +286,5 @@ button:active {
     outline: none;
     color: white;
     font-size: 15px;
-    padding: 3vb 
+    padding: 3vb
 }

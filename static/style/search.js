@@ -16,3 +16,14 @@ function searchAnime() {
     }
 }
 
+function applyFilters(event) {
+    event.preventDefault();
+    const form = document.getElementById('filterForm');
+    const formData = new FormData(form);
+    const types = formData.getAll('type'); // Récupère tous les types cochés
+    const queryString = types.map(type => `type=${type}`).join('&');
+    const searchQuery = document.getElementById('searchBox').value.trim();
+
+    // Reconstruire l'URL avec les filtres et rediriger
+    window.location.href = `/result_search?q=${encodeURIComponent(searchQuery)}&${queryString}`;
+}

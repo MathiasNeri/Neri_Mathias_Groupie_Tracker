@@ -188,16 +188,26 @@ type AnimeSearchResult struct {
 func SearchAnimeHandler(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query().Get("q")
 	page := r.URL.Query().Get("page")
+	types := r.URL.Query()["type"] // Cela récupère la liste des types sélectionnés depuis l'URL
+
 	if query == "" {
 		http.Error(w, "Query is required", http.StatusBadRequest)
 		return
 	}
 	if page == "" {
-		page = "1" // Default to page 1 if no page number is provided
+		page = "1" // Par défaut à la page 1 si aucun numéro de page n'est fourni
 	}
 
-	url := fmt.Sprintf("https://api.jikan.moe/v4/anime?q=%s&page=%s&sfw=true", url.QueryEscape(query), url.QueryEscape(page))
-	resp, err := http.Get(url)
+	// Construisez la partie de l'URL qui contient les types de filtre
+	typesQueryParam := ""
+	for _, t := range types {
+		typesQueryParam += "&type=" + url.QueryEscape(t)
+	}
+
+	// Ajoutez les types de filtre à la requête de recherche
+	searchURL := fmt.Sprintf("https://api.jikan.moe/v4/anime?q=%s&page=%s%s", url.QueryEscape(query), url.QueryEscape(page), typesQueryParam)
+
+	resp, err := http.Get(searchURL)
 	if err != nil {
 		http.Error(w, "Server error", http.StatusInternalServerError)
 		fmt.Println(err)

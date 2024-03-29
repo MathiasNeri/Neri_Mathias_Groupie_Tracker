@@ -26,6 +26,18 @@ html {
     border-radius: 10px;
 }
 
+.header-logo {
+    width : 8vh;
+    border-radius: 50%;
+    margin-right: 15px;
+    transition: transform 0.3s ease;
+
+}
+
+.header-logo:hover {
+    transform: scale(1.05); /* Légèrement plus grand lorsque survolé */
+}
+
 .navbar {
     display: flex;
     align-items: center;
@@ -184,4 +196,29 @@ button:active {
         width: calc(100% - 20px);
         /* 1 card per row on small screens */
     }
+}
+
+
+.filter-options {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.filter-options label {
+    margin: 0 10px;
+    font-weight: normal;
+}
+
+.filter-options input[type=submit] {
+    margin-left: 20px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.filter-options input[type=submit]:hover {
+    background-color: #0056b3;
 }
