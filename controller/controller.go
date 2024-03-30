@@ -12,6 +12,10 @@ import (
 
 const Port = "localhost:8080"
 
+var (
+	query string
+)
+
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	// Parse query parameters
 	queryParams := r.URL.Query()
@@ -186,7 +190,9 @@ type AnimeSearchResult struct {
 }
 
 func SearchAnimeHandler(w http.ResponseWriter, r *http.Request) {
-	query := r.URL.Query().Get("q")
+	if r.URL.Query().Get("q") != "" {
+		query = r.URL.Query().Get("q")
+	}
 	page := r.URL.Query().Get("page")
 	types := r.URL.Query()["type"] // Cela récupère la liste des types sélectionnés depuis l'URL
 
