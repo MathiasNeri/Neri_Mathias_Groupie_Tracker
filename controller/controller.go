@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+	"sync"
 )
 
 const Port = "localhost:8080"
@@ -187,55 +188,87 @@ type AnimeSearchResult struct {
 	Query      string
 	Results    []AnimeInfo
 	Pagination Pagination
+	Types      []string // Nouveau champ pour stocker les types sélectionnés
 }
 
 func SearchAnimeHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Query().Get("q") != "" {
 		query = r.URL.Query().Get("q")
 	}
-	page := r.URL.Query().Get("page")
-	types := r.URL.Query()["type"] // Cela récupère la liste des types sélectionnés depuis l'URL
-
 	if query == "" {
 		http.Error(w, "Query is required", http.StatusBadRequest)
 		return
 	}
-	if page == "" {
-		page = "1" // Par défaut à la page 1 si aucun numéro de page n'est fourni
+
+	pageStr := r.URL.Query().Get("page")
+	if pageStr == "" {
+		pageStr = "1"
 	}
-
-	// Construisez la partie de l'URL qui contient les types de filtre
-	typesQueryParam := ""
-	for _, t := range types {
-		typesQueryParam += "&type=" + url.QueryEscape(t)
-	}
-
-	// Ajoutez les types de filtre à la requête de recherche
-	searchURL := fmt.Sprintf("https://api.jikan.moe/v4/anime?q=%s&page=%s%s", url.QueryEscape(query), url.QueryEscape(page), typesQueryParam)
-
-	resp, err := http.Get(searchURL)
+	page, err := strconv.Atoi(pageStr)
 	if err != nil {
-		http.Error(w, "Server error", http.StatusInternalServerError)
-		fmt.Println(err)
+		http.Error(w, "Invalid page number", http.StatusBadRequest)
 		return
 	}
-	defer resp.Body.Close()
 
-	var result struct {
-		Data       []AnimeInfo `json:"data"`
-		Pagination Pagination  `json:"pagination"`
+	types := r.URL.Query()["type"]
+	var wg sync.WaitGroup
+	var results []AnimeInfo
+	var firstPagination Pagination
+
+	if len(types) == 0 {
+		types = append(types, "") // Handle search without any specific type
 	}
 
-	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
-		http.Error(w, "Error decoding response", http.StatusInternalServerError)
-		fmt.Println(err)
-		return
+	for _, t := range types {
+		wg.Add(1)
+		go func(t string) {
+			defer wg.Done()
+			searchURL := "https://api.jikan.moe/v4/anime?q=" + url.QueryEscape(query) + "&page=" + url.QueryEscape(pageStr) + "&sfw=true"
+			if t != "" {
+				searchURL += "&type=" + url.QueryEscape(t)
+			}
+
+			resp, err := http.Get(searchURL)
+			if err != nil {
+				fmt.Println("Error fetching data:", err)
+				return
+			}
+			defer resp.Body.Close()
+
+			var result struct {
+				Data       []AnimeInfo `json:"data"`
+				Pagination Pagination  `json:"pagination"`
+			}
+
+			if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+				fmt.Println("Error decoding response:", err)
+				return
+			}
+
+			if firstPagination.CurrentPage == 0 { // Assume all types have similar pagination for simplicity
+				firstPagination = result.Pagination
+			}
+
+			results = append(results, result.Data...)
+		}(t)
+	}
+
+	wg.Wait() // Wait for all go routines to complete
+
+	nextPage := page
+	if firstPagination.HasNextPage {
+		nextPage++
+	}
+	prevPage := page - 1
+	if prevPage < 1 {
+		prevPage = 1
 	}
 
 	data := AnimeSearchResult{
 		Query:      query,
-		Results:    result.Data,
-		Pagination: result.Pagination,
+		Results:    results,
+		Pagination: firstPagination,
+		Types:      types, // Passez les types sélectionnés au template
 	}
 
 	inittemplate.Temp.ExecuteTemplate(w, "result_search", data)
