@@ -51,6 +51,7 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 type AnimeInfo struct {
+	MalId  int    `json:"mal_id"`
 	Title  string `json:"title"`
 	Images struct {
 		Jpg struct {
@@ -190,6 +191,39 @@ type AnimeSearchResult struct {
 	Pagination Pagination
 	Types      []string // Nouveau champ pour stocker les types sélectionnés
 }
+type AnimeDetail struct {
+	MalID    int         `json:"mal_id"`
+	URL      string      `json:"url"`
+	Title    string      `json:"title"`
+	Synopsis string      `json:"synopsis"`
+	Images   AnimeImages `json:"images"`
+	Score    float64     `json:"score"`
+	Genres   []Genre     `json:"genres"`
+	Aired    Aired       `json:"aired"`
+	Episodes int         `json:"episodes"`
+	Status   string      `json:"status"`
+	Duration string      `json:"duration"`
+	Rating   string      `json:"rating"`
+}
+
+type AnimeImages struct {
+	Jpg struct {
+		ImageURL      string `json:"image_url"`
+		SmallImageURL string `json:"small_image_url"`
+		LargeImageURL string `json:"large_image_url"`
+	} `json:"jpg"`
+}
+
+type Genre struct {
+	MalID int    `json:"mal_id"`
+	Name  string `json:"name"`
+}
+
+type Aired struct {
+	From   string `json:"from"`
+	To     string `json:"to"`
+	String string `json:"string"`
+}
 
 func SearchAnimeHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Query().Get("q") != "" {
@@ -245,7 +279,7 @@ func SearchAnimeHandler(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			if firstPagination.CurrentPage == 0 { // Assume all types have similar pagination for simplicity
+			if firstPagination.CurrentPage == 0 || (firstPagination.LastVisiblePage < result.Pagination.LastVisiblePage) { // Assume all types have similar pagination for simplicity
 				firstPagination = result.Pagination
 			}
 
@@ -272,4 +306,110 @@ func SearchAnimeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	inittemplate.Temp.ExecuteTemplate(w, "result_search", data)
+}
+func AnimeDetailHandler(w http.ResponseWriter, r *http.Request) {
+	// Extrait l'animeID de l'URL
+	animeID := strings.TrimPrefix(r.URL.Path, "/anime_detail/")
+
+	if animeID == "" {
+		http.NotFound(w, r)
+		return
+	}
+
+	// Utilisez animeID pour obtenir les détails de l'anime de l'API
+	url := fmt.Sprintf("https://api.jikan.moe/v4/anime/%s", animeID)
+	resp, err := http.Get(url)
+	if err != nil || resp.StatusCode != 200 {
+		http.Error(w, "Failed to fetch anime details", http.StatusInternalServerError)
+		return
+	}
+	defer resp.Body.Close()
+
+	var detailResponse struct {
+		Data AnimeDetail `json:"data"`
+	}
+
+	if err := json.NewDecoder(resp.Body).Decode(&detailResponse); err != nil {
+		http.Error(w, "Failed to decode anime details", http.StatusInternalServerError)
+		return
+	}
+
+	// Passez detailResponse.Data au template
+	inittemplate.Temp.ExecuteTemplate(w, "anime_detail", detailResponse.Data)
+}
+
+func GenresHandler(w http.ResponseWriter, r *http.Request) {
+	// Faire une requête à l'API pour obtenir les genres
+	resp, err := http.Get("https://api.jikan.moe/v4/genres/anime?sfw=true")
+	if err != nil {
+		// Gérer l'erreur
+		http.Error(w, "Erreur lors de la récupération des genres", http.StatusInternalServerError)
+		return
+	}
+	defer resp.Body.Close()
+
+	var genresResponse struct {
+		Data []struct {
+			ID   int    `json:"mal_id"`
+			Name string `json:"name"`
+		} `json:"data"`
+	}
+
+	if err := json.NewDecoder(resp.Body).Decode(&genresResponse); err != nil {
+		// Gérer l'erreur
+		http.Error(w, "Erreur lors du décodage de la réponse", http.StatusInternalServerError)
+		return
+	}
+
+	// Rendre une page avec la liste des genres
+	inittemplate.Temp.ExecuteTemplate(w, "genres", genresResponse.Data)
+}
+func AnimeByGenreHandler(w http.ResponseWriter, r *http.Request) {
+	pathSegments := strings.Split(r.URL.Path, "/")
+	if len(pathSegments) < 3 || pathSegments[2] == "" {
+		http.Error(w, "Genre ID is required", http.StatusBadRequest)
+		return
+	}
+	genreID := pathSegments[2] // L'index 2 car il doit être après "/animes_by_genre/"
+
+	// Récupérer le numéro de page depuis les paramètres de requête, avec une valeur par défaut de 1
+	page := r.URL.Query().Get("page")
+	if page == "" {
+		page = "1"
+	}
+
+	// Construire l'URL de l'API pour requêter les animes du genre spécifié
+	apiURL := fmt.Sprintf("https://api.jikan.moe/v4/anime/genres/%s/?page=%s&sfw=true", url.QueryEscape(genreID), url.QueryEscape(page))
+
+	// Effectuer la requête à l'API
+	resp, err := http.Get(apiURL)
+	if err != nil {
+		http.Error(w, "Server error", http.StatusInternalServerError)
+		fmt.Println("Error fetching anime by genre:", err)
+		return
+	}
+	defer resp.Body.Close()
+
+	// Décoder la réponse
+	var result struct {
+		Data       []AnimeInfo `json:"data"`
+		Pagination Pagination  `json:"pagination"`
+	}
+
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		http.Error(w, "Error decoding API response", http.StatusInternalServerError)
+		return
+	}
+
+	// Préparation des données pour le template
+	data := struct {
+		GenreID    string
+		Animes     []AnimeInfo
+		Pagination Pagination
+	}{
+		GenreID:    genreID,
+		Animes:     result.Data,
+		Pagination: result.Pagination,
+	}
+	inittemplate.Temp.ExecuteTemplate(w, "animes_by_genre", data)
 }

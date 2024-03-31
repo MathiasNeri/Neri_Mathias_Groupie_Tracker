@@ -7,6 +7,7 @@
     <title>Anime Display</title>
     <link rel="stylesheet" href="/static/style/index.css">
     <script src="/static/style/search.js"></script>
+    <script src="/static/style/detail.js"></script>
 </head>
 
 <body>
@@ -15,7 +16,7 @@
             <a href="/index" title="Accueil">
                 <img src="/static/images/logo.png" alt="Logo" class="header-logo">
             </a>
-            <a href="#categories">Category</a>
+            <a href="/genres">Category</a>
             <a href="#favorites">Favorites</a>
             <div class="searchBox">
                 <input class="searchInput" type="text" id="searchBox" placeholder="Recherche...">
@@ -55,20 +56,27 @@
                 </button>
             </div>
     </header>
-
+    <h2>Random Anime</h2>
     <div class="random-anime-container">
-        <img class="random-anime-background" src="{{.RandomAnime.LargeImageURL}}" alt="{{.RandomAnime.Title}}" />
-        <div class="random-anime-content">
-            <h1 class="random-anime-title">{{.RandomAnime.Title}}</h1>
-            <p class="random-anime-synopsis">{{.RandomAnime.SynopsisOrDefault}}</p>
-        </div>
+        <a href="/anime_detail/{{.RandomAnime.MalId}}">
+            <img class="random-anime-background" src="{{.RandomAnime.LargeImageURL}}" alt="{{.RandomAnime.Title}}" />
+        </a>
+            <div class="random-anime-content">
+                <h1 class="random-anime-title">{{.RandomAnime.Title}}</h1>
+                <p class="random-anime-synopsis">{{.RandomAnime.SynopsisOrDefault}}</p>
+            </div>
+        
     </div>
+    
+    <h2>Upcoming Animes</h2>
     <div class="recent-animes">
         <div class="anime-list">
             {{range .RecentAnimes.Data}}
-            <div class="card">
+            <div class="card" data-anime-id="{{.MalId}}">
                 <h2>{{.Title}}</h2>
-                <img src="{{.Images.Jpg.LargeImageURL}}" alt="{{.Title}}">
+                <a href="/anime_detail/{{.MalId}}">
+                    <img src="{{.Images.Jpg.LargeImageURL}}" alt="{{.Title}}">
+                </a>
                 <p><strong>Genres:</strong>
                     {{range .Genres}}
                     {{.Name}},
@@ -89,9 +97,9 @@
             <button class="pagination-button">Previous</button>
         </a>
         {{end}}
-    
+
         <p>Page: {{.RecentAnimes.Pagination.CurrentPage}}/{{.RecentAnimes.Pagination.LastVisiblePage}}</p>
-    
+
         {{if .RecentAnimes.Pagination.HasNextPage}}
         <a href="/?page={{.RecentAnimes.Pagination.CurrentPage | add}}">
             <button class="pagination-button">Next</button>

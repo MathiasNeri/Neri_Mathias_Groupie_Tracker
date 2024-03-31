@@ -1,0 +1,87 @@
+@font-face {
+    font-family: "Light";
+    src: url(/static/polices/Mont-ExtraLightDEMO.otf);
+}
+
+body {
+    background-color: #D3D3D3;
+    line-height: 1.6;
+    font-family: "Light";
+    margin-top: 4.8vb;
+}
+
+.container {
+    max-width: 960px;
+    background: #fff;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    background-color: #D3D3D3;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.anime-image {
+    margin: 0 auto 20px;
+    display: block;
+}
+
+.anime-image img {
+    border-radius: 10px;
+    max-width: 100%;
+    height: auto;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.anime-info h2 {
+    color: #007bff;
+    margin: 10px 0;
+}
+
+.anime-info p, .anime-info ul {
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.anime-detail-main .genres-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.anime-detail-main .genres-list li {
+    background: #007bff;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.anime-detail-main .genres-list li:hover {
+    background-color: #0056b3;
+}
+
+.anime-detail-main .genres-list li a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.slash{
+    font-family: Arial, sans-serif;
+}
+
+@media (max-width: 768px) {
+    .anime-info h2 {
+        font-size: 1.5rem;
+    }
+}

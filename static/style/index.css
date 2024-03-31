@@ -5,12 +5,10 @@
 
 body,
 html {
-    margin: 0;
-    padding: 0;
     height: 100%;
-    font-family: Arial, sans-serif;
-    padding-top: 1vh;
-    background-color: #778899;
+    font-family: "Light";
+    padding-top: 5vh;
+    background-color: #D3D3D3;
 }
 
 .random-anime {
@@ -55,7 +53,7 @@ html {
     overflow: hidden;
     text-align: center;
     color: white;
-    margin-top: 9vh;
+    margin-top: 3vh;
     border-radius: 15px;
 
     /* Couleur du texte */
@@ -96,6 +94,8 @@ html {
     /* Taille du titre */
     margin-bottom: 0.5em;
 }
+
+
 
 .random-anime-synopsis {
     font-size: 1em;
@@ -216,6 +216,7 @@ html {
     box-sizing: border-box;
     /* assure que le padding est inclus dans la largeur */
     border-radius: 10px;
+
 }
 
 .header-logo {
@@ -234,12 +235,15 @@ html {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+
 }
 
 .navbar a {
     color: #fff;
     padding: 0 15px;
     text-decoration: none;
+    font-family: "Heavy";
 }
 
 .searchBox {

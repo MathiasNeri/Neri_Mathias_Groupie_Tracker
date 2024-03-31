@@ -13,7 +13,9 @@ func InitServe() {
 	http.Handle("/static/", http.StripPrefix("/static/", FileServer))
 	http.HandleFunc("/index", controller.IndexHandler)
 	http.HandleFunc("/result_search", controller.SearchAnimeHandler)
-
+	http.HandleFunc("/anime_detail/", controller.AnimeDetailHandler)
+	http.HandleFunc("/genres/", controller.GenresHandler)
+	http.HandleFunc("/animes_by_genre/", controller.AnimeByGenreHandler)
 	if err := http.ListenAndServe(controller.Port, nil); err != nil {
 
 		fmt.Printf("ERREUR LORS DE L'INITIATION DES ROUTES %v \n", err)

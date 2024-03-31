@@ -1,0 +1,17 @@
+{{define "genres"}}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Genres</title>
+    <!-- Lien CSS -->
+</head>
+<body>
+    <h1>Genres</h1>
+    <ul>
+    {{range .}}
+        <li><a href="/animes_by_genre/{{.ID}}">{{.Name}}</a></li>
+    {{end}}
+    </ul>
+</body>
+</html>
+{{end}}

@@ -8,8 +8,8 @@ html {
     margin-top: 4.8vb;
     padding: 0;
     height: 100%;
-    font-family: 'Arial', sans-serif;
-    background: #f2f2f2;
+    font-family: "Light";
+    background-color: #D3D3D3;
 }
 
 .site-header {
@@ -24,6 +24,7 @@ html {
     border-bottom: 1px solid #fff; /* ajout d'une bordure pour séparer l'en-tête du contenu */
     box-sizing: border-box; /* assure que le padding est inclus dans la largeur */
     border-radius: 10px;
+
 }
 
 .header-logo {
@@ -48,6 +49,7 @@ html {
     color: #fff;
     padding: 0 15px;
     text-decoration: none;
+    font-family: "Heavy";
 }
 
 .searchBox {
