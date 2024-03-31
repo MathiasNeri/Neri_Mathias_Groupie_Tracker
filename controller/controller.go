@@ -379,7 +379,7 @@ func AnimeByGenreHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Construire l'URL de l'API pour requêter les animes du genre spécifié
-	apiURL := fmt.Sprintf("https://api.jikan.moe/v4/anime/genres/%s/?page=%s&sfw=true", url.QueryEscape(genreID), url.QueryEscape(page))
+	apiURL := fmt.Sprintf("https://api.jikan.moe/v4/anime?genres=%s&page=%s&sfw=true", genreID, url.QueryEscape(page))
 
 	// Effectuer la requête à l'API
 	resp, err := http.Get(apiURL)
