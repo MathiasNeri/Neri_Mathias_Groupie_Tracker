@@ -463,7 +463,7 @@ func UpdateFavorites(animeID int, add bool) error {
 		return err
 	}
 
-	return os.WriteFile("path/to/favorites.json", file, 0644)
+	return os.WriteFile("/saves/favorites.json", file, 0644)
 }
 
 func Contains(slice []int, val int) bool {
