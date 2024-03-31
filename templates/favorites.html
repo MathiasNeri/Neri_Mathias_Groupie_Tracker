@@ -1,0 +1,26 @@
+{{define "favorites"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Vos méta-données et liens CSS ici -->
+    <title>Favorites</title>
+</head>
+<body>
+    <!-- Votre header ici -->
+    <div class="container">
+        <h1>Favorites</h1>
+        <div class="anime-list">
+            {{range .}}
+            <div class="card">
+                <h2>{{.Title}}</h2>
+                <a href="/anime_detail/{{.MalId}}">
+                    <img src="{{.Images.Jpg.LargeImageURL}}" alt="{{.Title}}">
+                </a>
+                <!-- Autres infos de l'anime -->
+            </div>
+            {{end}}
+        </div>
+    </div>
+</body>
+</html>
+{{end}}

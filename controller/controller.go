@@ -6,6 +6,7 @@ import (
 	inittemplate "groupie/templates"
 	"net/http"
 	"net/url"
+	"os"
 	"strconv"
 	"strings"
 	"sync"
@@ -411,6 +412,124 @@ func AnimeByGenreHandler(w http.ResponseWriter, r *http.Request) {
 		Animes:     result.Data,
 		Pagination: result.Pagination,
 	}
-	fmt.Println(data.Pagination)
 	inittemplate.Temp.ExecuteTemplate(w, "animes_by_genre", data)
+}
+
+func ReadFavorites() ([]int, error) {
+	file, err := os.ReadFile("path/to/favorites.json")
+	if err != nil {
+		return nil, err
+	}
+
+	var data struct {
+		Favorites []int `json:"favorites"`
+	}
+
+	err = json.Unmarshal(file, &data)
+	if err != nil {
+		return nil, err
+	}
+
+	return data.Favorites, nil
+}
+
+func UpdateFavorites(animeID int, add bool) error {
+	favorites, err := ReadFavorites()
+	if err != nil {
+		return err
+	}
+
+	// Ajouter ou supprimer l'ID de l'anime
+	if add {
+		// Assurer que l'ID n'est pas déjà dans les favoris
+		if !Contains(favorites, animeID) {
+			favorites = append(favorites, animeID)
+		}
+	} else {
+		// Supprimer l'ID si présent
+		for i, favID := range favorites {
+			if favID == animeID {
+				favorites = append(favorites[:i], favorites[i+1:]...)
+				break
+			}
+		}
+	}
+
+	// Sauvegarder la nouvelle liste
+	file, err := json.Marshal(struct {
+		Favorites []int `json:"favorites"`
+	}{Favorites: favorites})
+	if err != nil {
+		return err
+	}
+
+	return os.WriteFile("path/to/favorites.json", file, 0644)
+}
+
+func Contains(slice []int, val int) bool {
+	for _, item := range slice {
+		if item == val {
+			return true
+		}
+	}
+	return false
+}
+
+func AddFavoriteHandler(w http.ResponseWriter, r *http.Request) {
+	// Exemple pour récupérer l'ID de l'anime à partir de la requête
+	animeID, _ := strconv.Atoi(r.FormValue("animeID"))
+	if animeID > 0 {
+		err := UpdateFavorites(animeID, true)
+		if err != nil {
+			http.Error(w, "Failed to update favorites", http.StatusInternalServerError)
+		} else {
+			// Rediriger vers la page des favoris ou répondre success
+		}
+	} else {
+		http.Error(w, "Invalid anime ID", http.StatusBadRequest)
+	}
+}
+
+func RemoveFavoriteHandler(w http.ResponseWriter, r *http.Request) {
+	// Exemple pour récupérer l'ID de l'anime à partir de la requête
+	animeID, _ := strconv.Atoi(r.FormValue("animeID"))
+	if animeID > 0 {
+		err := UpdateFavorites(animeID, false)
+		if err != nil {
+			http.Error(w, "Failed to update favorites", http.StatusInternalServerError)
+		} else {
+			// Rediriger vers la page des favoris ou répondre success
+		}
+	} else {
+		http.Error(w, "Invalid anime ID", http.StatusBadRequest)
+	}
+}
+
+func FavoritesPageHandler(w http.ResponseWriter, r *http.Request) {
+	favorites, err := ReadFavorites()
+	if err != nil {
+		http.Error(w, "Failed to read favorites", http.StatusInternalServerError)
+		return
+	}
+
+	var favoritesData []AnimeInfo
+	for _, animeID := range favorites {
+		url := fmt.Sprintf("https://api.jikan.moe/v4/anime/%d", animeID)
+		resp, err := http.Get(url)
+		if err != nil {
+			continue // Skip en cas d'erreur
+		}
+		defer resp.Body.Close()
+
+		var detailResponse struct {
+			Data AnimeInfo `json:"data"`
+		}
+		if err := json.NewDecoder(resp.Body).Decode(&detailResponse); err != nil {
+			continue // Skip en cas d'erreur
+		}
+
+		favoritesData = append(favoritesData, detailResponse.Data)
+	}
+
+	inittemplate.Temp.ExecuteTemplate(w, "favorites", struct{ Favorites []AnimeInfo }{Favorites: favoritesData})
 }

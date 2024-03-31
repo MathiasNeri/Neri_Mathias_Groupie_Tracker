@@ -1,0 +1,63 @@
+@font-face {
+    font-family: "Light";
+    src: url(/static/polices/Mont-ExtraLightDEMO.otf);
+}
+
+body,
+html{
+    margin-top: 7vb;
+    padding: 0;
+    height: 100%;
+    font-family: "Light";
+    background-color: #D3D3D3;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-top: 50px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+li {
+    margin: 10px;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    transition: transform 0.2s ease;
+}
+
+li:hover {
+    transform: translateY(-5px);
+    border-color: #007bff;
+}
+
+li a {
+    display: block;
+    padding: 10px 20px;
+    text-decoration: none;
+    background: #007bff;
+    color: white;
+    font-weight: bold;
+    border-radius: 15px;
+}
+
+li  a:hover {
+    
+    background-color: #0056b3;
+    border-radius: 15px;
+}
+
+@media (max-width: 600px) {
+    ul {
+        flex-direction: column;
+        align-items: center;
+    }
+}

@@ -1,3 +1,9 @@
+@font-face {
+    font-family: "Light";
+    src: url(/static/polices/Mont-ExtraLightDEMO.otf);
+}
+
+
 body,
 html {
     height: 100%;

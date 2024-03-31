@@ -16,6 +16,9 @@ func InitServe() {
 	http.HandleFunc("/anime_detail/", controller.AnimeDetailHandler)
 	http.HandleFunc("/genres/", controller.GenresHandler)
 	http.HandleFunc("/animes_by_genre/", controller.AnimeByGenreHandler)
+	http.HandleFunc("/add_favorite", controller.AddFavoriteHandler)
+	http.HandleFunc("favorites", controller.FavoritesPageHandler)
+
 	if err := http.ListenAndServe(controller.Port, nil); err != nil {
 
 		fmt.Printf("ERREUR LORS DE L'INITIATION DES ROUTES %v \n", err)

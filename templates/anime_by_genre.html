@@ -19,7 +19,7 @@
             <a href="/index" title="Accueil">
                 <img src="/static/images/logo.png" alt="Logo" class="header-logo">
             </a>
-            <a href="#categories">Category</a>
+            <a href="/genres">Category</a>
             <a href="#favorites">Favorites</a>
             <div class="searchBox">
                 <form id="searchForm">
@@ -67,21 +67,6 @@
                 </form>
             </div>
     </header>
-    <div class="filter-options">
-        <form id="filterForm" onsubmit="applyFilters(event)">
-            <label><input type="checkbox" name="type" value="TV"> TV</label>
-            <label><input type="checkbox" name="type" value="OVA"> OVA</label>
-            <label><input type="checkbox" name="type" value="Movie"> Movie</label>
-            <label><input type="checkbox" name="type" value="Special"> Special</label>
-            <label><input type="checkbox" name="type" value="ONA"> ONA</label>
-            <label><input type="checkbox" name="type" value="Music"> Music</label>
-            <label><input type="checkbox" name="type" value="CM"> CM</label>
-            <label><input type="checkbox" name="type" value="PV"> PV</label>
-            <label><input type="checkbox" name="type" value="tv_special"> TV Special</label>
-
-            <input type="submit" value="Appliquer les filtres">
-        </form>
-    </div>
     <section id="searchResults">
         {{range .Animes}}
         <div class="card" data-anime-id="{{.MalId}}">
@@ -101,23 +86,22 @@
     </section>
     <div class="pagination">
         {{if gt .Pagination.CurrentPage 1}}
-        <a href="/animes_by_genre?genreID={{.GenreID}}&page=1">
+        <a href="/animes_by_genre/{{.GenreID}}?page=1">
             <button class="pagination-button">First</button>
         </a>
-        <a href="/animes_by_genre?genreID={{.GenreID}}&page={{sub .Pagination.CurrentPage 1}}">
+        <a href="/animes_by_genre/{{.GenreID}}?page={{.Pagination.CurrentPage | sub}}">
             <button class="pagination-button">Previous</button>
         </a>
         {{end}}
-        {{.Pagination.CurrentPage}}
-    
+        <span>Page {{.Pagination.CurrentPage}} of {{.Pagination.LastVisiblePage}}</span>
         {{if .Pagination.HasNextPage}}      
-        <a href="/animes_by_genre?genreID={{.GenreID}}&page={{add .Pagination.CurrentPage 1}}">
+        <a href="/animes_by_genre/{{.GenreID}}?page={{.Pagination.CurrentPage | add}}">
             <button class="pagination-button">Next</button>
         </a>
-        <a href="/animes_by_genre?genreID={{.GenreID}}&page={{.Pagination.LastVisiblePage}}">
+        <a href="/animes_by_genre/{{.GenreID}}?page={{.Pagination.LastVisiblePage}}">
             <button class="pagination-button">Last</button>
         </a>
-        <span>Page {{.Pagination.CurrentPage}} of {{.Pagination.LastVisiblePage}}</span>
+        
         {{end}}
     </div>
 
