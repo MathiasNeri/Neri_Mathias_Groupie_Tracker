@@ -90,10 +90,10 @@
     </div>
     <div class="pagination">
         {{if gt .RecentAnimes.Pagination.CurrentPage 1}}
-        <a href="/?page=1">
+        <a href="/index?page=1">
             <button class="pagination-button">First</button>
         </a>
-        <a href="/?page={{.RecentAnimes.Pagination.CurrentPage | sub}}">
+        <a href="/index?page={{.RecentAnimes.Pagination.CurrentPage | sub}}">
             <button class="pagination-button">Previous</button>
         </a>
         {{end}}
@@ -101,10 +101,10 @@
         <p>Page: {{.RecentAnimes.Pagination.CurrentPage}}/{{.RecentAnimes.Pagination.LastVisiblePage}}</p>
 
         {{if .RecentAnimes.Pagination.HasNextPage}}
-        <a href="/?page={{.RecentAnimes.Pagination.CurrentPage | add}}">
+        <a href="/index?page={{.RecentAnimes.Pagination.CurrentPage | add}}">
             <button class="pagination-button">Next</button>
         </a>
-        <a href="/?page={{.RecentAnimes.Pagination.LastVisiblePage}}">
+        <a href="/index?page={{.RecentAnimes.Pagination.LastVisiblePage}}">
             <button class="pagination-button">Last</button>
         </a>
         {{end}}

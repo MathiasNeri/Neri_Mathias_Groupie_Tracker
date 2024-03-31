@@ -133,9 +133,9 @@ func getRecentAnimes(page string) (*AnimeResponse, error) {
 
 	var url string
 	if page == "" {
-		url = "https://api.jikan.moe/v4/anime?order_by=start_date&sort=desc&limit=20"
+		url = "https://api.jikan.moe/v4/anime?order_by=start_date&sort=desc&sfw=true&limit=20"
 	} else {
-		url = "https://api.jikan.moe/v4/anime?order_by=start_date&sort=desc&limit=20&page=" + page
+		url = "https://api.jikan.moe/v4/anime?order_by=start_date&sort=desc&sfw=true&limit=20&page=" + page
 	}
 
 	resp, err := http.Get(url)
@@ -411,5 +411,6 @@ func AnimeByGenreHandler(w http.ResponseWriter, r *http.Request) {
 		Animes:     result.Data,
 		Pagination: result.Pagination,
 	}
+	fmt.Println(data.Pagination)
 	inittemplate.Temp.ExecuteTemplate(w, "animes_by_genre", data)
 }
