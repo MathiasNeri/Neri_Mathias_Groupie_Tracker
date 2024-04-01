@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"time"
 )
 
 const Port = "localhost:8080"
@@ -416,8 +417,9 @@ func AnimeByGenreHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ReadFavorites() ([]int, error) {
-	file, err := os.ReadFile("path/to/favorites.json")
+	file, err := os.ReadFile("saves/favorites.json")
 	if err != nil {
+		fmt.Println("test")
 		return nil, err
 	}
 
@@ -436,6 +438,7 @@ func ReadFavorites() ([]int, error) {
 func UpdateFavorites(animeID int, add bool) error {
 	favorites, err := ReadFavorites()
 	if err != nil {
+		fmt.Println(err)
 		return err
 	}
 
@@ -463,7 +466,7 @@ func UpdateFavorites(animeID int, add bool) error {
 		return err
 	}
 
-	return os.WriteFile("/saves/favorites.json", file, 0644)
+	return os.WriteFile("saves/favorites.json", file, 0644)
 }
 
 func Contains(slice []int, val int) bool {
@@ -481,9 +484,7 @@ func AddFavoriteHandler(w http.ResponseWriter, r *http.Request) {
 	if animeID > 0 {
 		err := UpdateFavorites(animeID, true)
 		if err != nil {
-			http.Error(w, "Failed to update favorites", http.StatusInternalServerError)
-		} else {
-			// Rediriger vers la page des favoris ou répondre success
+			fmt.Println(err)
 		}
 	} else {
 		http.Error(w, "Invalid anime ID", http.StatusBadRequest)
@@ -491,14 +492,11 @@ func AddFavoriteHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func RemoveFavoriteHandler(w http.ResponseWriter, r *http.Request) {
-	// Exemple pour récupérer l'ID de l'anime à partir de la requête
 	animeID, _ := strconv.Atoi(r.FormValue("animeID"))
 	if animeID > 0 {
 		err := UpdateFavorites(animeID, false)
 		if err != nil {
 			http.Error(w, "Failed to update favorites", http.StatusInternalServerError)
-		} else {
-			// Rediriger vers la page des favoris ou répondre success
 		}
 	} else {
 		http.Error(w, "Invalid anime ID", http.StatusBadRequest)
@@ -512,24 +510,37 @@ func FavoritesPageHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var favoritesData []AnimeInfo
+	ticker := time.NewTicker(800 * time.Millisecond) // Envoyer un signal toutes les 800 millisecondes PARCE QUE MON API EST HANDICAPEE
+	defer ticker.Stop()
+
+	favoritesData := make([]AnimeInfo, 0, len(favorites))
+
 	for _, animeID := range favorites {
-		url := fmt.Sprintf("https://api.jikan.moe/v4/anime/%d", animeID)
-		resp, err := http.Get(url)
-		if err != nil {
-			continue // Skip en cas d'erreur
+		<-ticker.C // Attendre le prochain signal du ticker avant de continuer
+		animeData, err := getAnimeDetails(animeID)
+		if err == nil {
+			favoritesData = append(favoritesData, animeData)
 		}
-		defer resp.Body.Close()
-
-		var detailResponse struct {
-			Data AnimeInfo `json:"data"`
-		}
-		if err := json.NewDecoder(resp.Body).Decode(&detailResponse); err != nil {
-			continue // Skip en cas d'erreur
-		}
-
-		favoritesData = append(favoritesData, detailResponse.Data)
 	}
 
-	inittemplate.Temp.ExecuteTemplate(w, "favorites", struct{ Favorites []AnimeInfo }{Favorites: favoritesData})
+	inittemplate.Temp.ExecuteTemplate(w, "favorites", favoritesData)
+}
+
+func getAnimeDetails(animeID int) (AnimeInfo, error) {
+	var animeInfo AnimeInfo
+	url := fmt.Sprintf("https://api.jikan.moe/v4/anime/%d", animeID)
+	resp, err := http.Get(url)
+	if err != nil {
+		return animeInfo, err
+	}
+	defer resp.Body.Close()
+
+	var detailResponse struct {
+		Data AnimeInfo `json:"data"`
+	}
+	if err := json.NewDecoder(resp.Body).Decode(&detailResponse); err != nil {
+		return animeInfo, err
+	}
+
+	return detailResponse.Data, nil
 }

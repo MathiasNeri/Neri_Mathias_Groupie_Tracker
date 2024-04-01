@@ -17,7 +17,7 @@ func InitServe() {
 	http.HandleFunc("/genres/", controller.GenresHandler)
 	http.HandleFunc("/animes_by_genre/", controller.AnimeByGenreHandler)
 	http.HandleFunc("/add_favorite", controller.AddFavoriteHandler)
-	http.HandleFunc("favorites", controller.FavoritesPageHandler)
+	http.HandleFunc("/favorites", controller.FavoritesPageHandler)
 
 	if err := http.ListenAndServe(controller.Port, nil); err != nil {
 
