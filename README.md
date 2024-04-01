@@ -44,4 +44,4 @@ Fonctionnalité : Retire un anime de la liste des favoris.
 Fonctionnalité : Affiche la liste des animes favoris de l'utilisateur.
 
 8-GET /a_propos
-Fonctionnalité : Affiche la page "À propos" avec des informations sur l'application et le développeur.
+Fonctionnalité : Affiche la page "À propos" avec des informations sur l'application et les difficultés.
