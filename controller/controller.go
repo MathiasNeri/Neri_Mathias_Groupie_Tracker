@@ -119,6 +119,11 @@ func getRandomAnime() (*AnimeInfo, error) {
 	}
 }
 
+func NotFoundPageHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotFound)
+	inittemplate.Temp.ExecuteTemplate(w, "404", nil)
+}
+
 // Fonction pour récupérer et filtrer les animes récents, excluant certains genres
 func getRecentAnimes(page string) (*AnimeResponse, error) {
 	// Parse 'page' parameter as an integer
@@ -192,6 +197,7 @@ type AnimeSearchResult struct {
 	Results    []AnimeInfo
 	Pagination Pagination
 	Types      []string // Nouveau champ pour stocker les types sélectionnés
+	Searched   bool
 }
 type AnimeDetail struct {
 	MalID    int         `json:"mal_id"`
@@ -573,4 +579,8 @@ func getAnimeDetails(animeID int) (AnimeInfo, error) {
 	}
 
 	return detailResponse.Data, nil
+}
+
+func AboutHandler(w http.ResponseWriter, r *http.Request) {
+	inittemplate.Temp.ExecuteTemplate(w, "about", nil)
 }

@@ -1,16 +1,15 @@
-{{define "genres"}}
+{{define "404"}}
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <title>Genres</title>
-    <link rel="stylesheet" href="/static/style/search.css">
-    <link rel="stylesheet" href="/static/style/genre.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 Not Found</title>
+    <link rel="stylesheet" href="/static/style/index.css">
+    <link rel="stylesheet" href="/static/style/404.css">
     <script src="/static/style/search.js"></script>
     <link rel="icon" href="/static/images/logo.png" type="image/png">
-
 </head>
-
 <body>
     <header class="site-header">
         <nav class="navbar">
@@ -65,15 +64,12 @@
                 </form>
             </div>
     </header>
-    <h1>Genres</h1>
-    <ul>
-        
-            {{range .}}
-            <li><a href="/animes_by_genre/{{.ID}}">{{.Name}}</a></li>
-            {{end}}
-        </div>
-    </ul>
+    <div class="error-container">
+        <img src="/static/images/conan.png" alt="Detective" class="detective-img">
+        <h1>Oops! Case Not Found...</h1>
+        <p>It seems our detective has stumbled upon an unsolvable mystery.</p>
+        <a href="/" class="home-btn">Return to Home Base</a>
+    </div>
 </body>
-
 </html>
 {{end}}

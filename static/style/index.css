@@ -3,6 +3,10 @@
     src: url("/static/polices/Mont-HeavyDEMO.otf");
 }
 
+@font-face {
+    font-family: "Light";
+    src: url(/static/polices/Mont-ExtraLightDEMO.otf);
+}
 body,
 html {
     height: 100%;
@@ -291,4 +295,26 @@ button:active {
     color: white;
     font-size: 15px;
     padding: 3vb
+}
+
+.site-footer {
+    background-color: #333; /* ou toute autre couleur de fond que vous préférez */
+    color: white; /* pour le texte du pied de page */
+    padding: 2vh;
+    text-align: center;
+    border-radius: 15px;
+}
+
+.footer-about a {
+    color: white; /* ou toute autre couleur de lien que vous préférez */
+    text-decoration: none;
+    padding: 5px;
+}
+
+.footer-about a:hover {
+    text-decoration: underline; /* effet au survol du lien */
+}
+
+.about-container{
+    font-size: x-large;
 }

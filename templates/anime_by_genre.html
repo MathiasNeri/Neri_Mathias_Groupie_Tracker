@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/static/style/animebygenre.css">
     <script src="/static/style/search.js"></script>
     <script src="/static/style/detail.js"></script>
+    <link rel="icon" href="/static/images/logo.png" type="image/png">
 
 </head>
 
@@ -68,6 +69,7 @@
             </div>
     </header>
     <section id="searchResults">
+        {{if .Animes}}
         {{range .Animes}}
         <div class="card" data-anime-id="{{.MalId}}">
             <h2>{{.Title}}</h2>
@@ -83,6 +85,12 @@
             <p><strong>Type:</strong> {{.Type}}</p>
         </div>
         {{end}}
+        {{else}}
+        <div class="not-found-container">
+            <img src="/static/images/police.gif" alt="Police" class="Bac-img">
+            <h1>You are under arrest, hands up !!!</h1><p> You can't come in here</p>
+        </div>
+        {{end}}
     </section>
     <div class="pagination">
         {{if gt .Pagination.CurrentPage 1}}
@@ -94,14 +102,14 @@
         </a>
         {{end}}
         <span>Page {{.Pagination.CurrentPage}} of {{.Pagination.LastVisiblePage}}</span>
-        {{if .Pagination.HasNextPage}}      
+        {{if .Pagination.HasNextPage}}
         <a href="/animes_by_genre/{{.GenreID}}?page={{.Pagination.CurrentPage | add}}">
             <button class="pagination-button">Next</button>
         </a>
         <a href="/animes_by_genre/{{.GenreID}}?page={{.Pagination.LastVisiblePage}}">
             <button class="pagination-button">Last</button>
         </a>
-        
+
         {{end}}
     </div>
 

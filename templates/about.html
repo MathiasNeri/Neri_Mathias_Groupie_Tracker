@@ -1,14 +1,14 @@
-{{define "genres"}}
+{{define "about"}}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Genres</title>
-    <link rel="stylesheet" href="/static/style/search.css">
-    <link rel="stylesheet" href="/static/style/genre.css">
-    <script src="/static/style/search.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About</title>
     <link rel="icon" href="/static/images/logo.png" type="image/png">
-
+    <script src="/static/style/search.js"></script>
+    <link rel="stylesheet" href="/static/style/index.css">
 </head>
 
 <body>
@@ -65,15 +65,32 @@
                 </form>
             </div>
     </header>
-    <h1>Genres</h1>
-    <ul>
-        
-            {{range .}}
-            <li><a href="/animes_by_genre/{{.ID}}">{{.Name}}</a></li>
-            {{end}}
-        </div>
-    </ul>
+    <div class="about-container">
+        <h1>Liste des taches dans l’ordre : </h1>
+        <ol class="task-list">
+            <li>La page d'accueil</li>
+            <li>La fonction de recherche</li>
+            <li>Les categories</li>
+            <li>Les favoris</li>
+        </ol>
+        <p>Personnellement, la partie où j'ai eu le plus de mal était au niveau des favoris. En effet, m'occuper du json
+            a
+            été très compliqué pour moi qui aie du mal dans ce domaine. De plus, j'ai mis Énormément de temps à
+            comprendre pourquoi des fois, quand j'affichais mes favoris, ça en affichait que 2, ou 3, puis, je refresh
+            la
+            page, et plus qu' 1, etc.. J'ai compris beaucoup plus tard que c'était dû au Rate Limiting de mon API, qui
+            était
+            limité à 3 requêtes par secondes (en théorie puisque j'ai dû le passer à 800 ms par requête pour que ça
+            daigne
+            marcher). J'ai aussi eu beaucoup de mal à mettre en place la pagination avec les filtres, car je voulais
+            absolument le paginer, c'est logique, mais c'était très compliqué étant donné que je compilais les résultats
+            de
+            plusieurs requêtes.</p>
+    </div>
+
+
 </body>
 
 </html>
+
 {{end}}

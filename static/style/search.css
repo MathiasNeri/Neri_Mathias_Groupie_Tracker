@@ -3,6 +3,11 @@
     src: url("/static/polices/Mont-HeavyDEMO.otf");
 }
 
+@font-face {
+    font-family: "Light";
+    src: url(/static/polices/Mont-ExtraLightDEMO.otf);
+}
+
 body,
 html {
     margin-top: 4.8vb;
@@ -25,6 +30,16 @@ html {
     box-sizing: border-box; /* assure que le padding est inclus dans la largeur */
     border-radius: 10px;
 
+}
+
+.detective-img {
+    width: 50%;
+    height: auto;
+}
+
+.not-found-container{
+    display: flex;
+    align-items: center;
 }
 
 .header-logo {
