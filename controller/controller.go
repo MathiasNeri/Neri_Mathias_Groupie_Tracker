@@ -310,16 +310,16 @@ func SearchAnimeHandler(w http.ResponseWriter, r *http.Request) {
 	inittemplate.Temp.ExecuteTemplate(w, "result_search", data)
 }
 func AnimeDetailHandler(w http.ResponseWriter, r *http.Request) {
-	// Extrait l'animeID de l'URL
-	animeID := strings.TrimPrefix(r.URL.Path, "/anime_detail/")
-
-	if animeID == "" {
-		http.NotFound(w, r)
+	// Extract animeID from the URL
+	animeIDStr := strings.TrimPrefix(r.URL.Path, "/anime_detail/")
+	animeID, err := strconv.Atoi(animeIDStr)
+	if err != nil {
+		http.Error(w, "Invalid Anime ID", http.StatusBadRequest)
 		return
 	}
 
-	// Utilisez animeID pour obtenir les détails de l'anime de l'API
-	url := fmt.Sprintf("https://api.jikan.moe/v4/anime/%s", animeID)
+	// Get anime details from the API
+	url := fmt.Sprintf("https://api.jikan.moe/v4/anime/%s", animeIDStr)
 	resp, err := http.Get(url)
 	if err != nil || resp.StatusCode != 200 {
 		http.Error(w, "Failed to fetch anime details", http.StatusInternalServerError)
@@ -327,17 +327,36 @@ func AnimeDetailHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer resp.Body.Close()
 
+	// Decode the response
 	var detailResponse struct {
 		Data AnimeDetail `json:"data"`
 	}
-
 	if err := json.NewDecoder(resp.Body).Decode(&detailResponse); err != nil {
 		http.Error(w, "Failed to decode anime details", http.StatusInternalServerError)
 		return
 	}
 
-	// Passez detailResponse.Data au template
-	inittemplate.Temp.ExecuteTemplate(w, "anime_detail", detailResponse.Data)
+	// Read favorites from JSON
+	userFavorites, err := ReadFavorites()
+	if err != nil {
+		// Handle the error, maybe the JSON file doesn't exist yet so you could check for os.IsNotExist(err) and create it.
+		http.Error(w, "Failed to read favorites", http.StatusInternalServerError)
+		return
+	}
+
+	// Check if the current anime is a favorite
+	isFavorite := Contains(userFavorites, animeID)
+
+	// Serve the template with the anime details and the favorite status
+	data := struct {
+		AnimeDetail
+		IsFavorite bool
+	}{
+		AnimeDetail: detailResponse.Data,
+		IsFavorite:  isFavorite,
+	}
+
+	inittemplate.Temp.ExecuteTemplate(w, "anime_detail", data)
 }
 
 func GenresHandler(w http.ResponseWriter, r *http.Request) {
@@ -479,8 +498,13 @@ func Contains(slice []int, val int) bool {
 }
 
 func AddFavoriteHandler(w http.ResponseWriter, r *http.Request) {
-	// Exemple pour récupérer l'ID de l'anime à partir de la requête
-	animeID, _ := strconv.Atoi(r.FormValue("animeID"))
+	animeIDStr := strings.TrimPrefix(r.URL.Path, "/addFavorite/")
+	// Convertit cette partie en un entier
+	animeID, err := strconv.Atoi(animeIDStr)
+	if err != nil {
+		http.Error(w, "Invalid anime ID", http.StatusBadRequest)
+		return
+	}
 	if animeID > 0 {
 		err := UpdateFavorites(animeID, true)
 		if err != nil {
@@ -492,7 +516,13 @@ func AddFavoriteHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func RemoveFavoriteHandler(w http.ResponseWriter, r *http.Request) {
-	animeID, _ := strconv.Atoi(r.FormValue("animeID"))
+	animeIDStr := strings.TrimPrefix(r.URL.Path, "/removeFavorite/")
+	// Convertit cette partie en un entier
+	animeID, err := strconv.Atoi(animeIDStr)
+	if err != nil {
+		http.Error(w, "Invalid anime ID", http.StatusBadRequest)
+		return
+	}
 	if animeID > 0 {
 		err := UpdateFavorites(animeID, false)
 		if err != nil {

@@ -85,3 +85,82 @@ h1 {
         font-size: 1.5rem;
     }
 }
+
+.fav-container {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 15px;
+    cursor: pointer;
+    user-select: none;
+    border-radius: 10px;
+    box-shadow: rgba(46, 46, 46, 0.2) 0px 8px 24px;
+    color: rgb(255, 255, 255);
+    background-color: rgb(36, 36, 36); /* Assurez-vous que cette couleur de fond est celle que vous souhaitez. */
+}
+
+.favorite-checkbox {
+    display: none; /* Cachez la checkbox originale. */
+}
+.action {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* ajustez l'espace entre les éléments du texte */
+}
+
+.favorite-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    gap: 10px; /* ajustez l'espace entre le cœur et le texte */
+}
+
+.favorite-label svg {
+    transition: fill 0.3s ease; /* animation fluide pour le changement de couleur */
+}
+
+.favorite-checkbox:checked + .favorite-label svg {
+    fill: hsl(0deg 100% 50%); /* Changement de couleur pour le cœur. */
+    stroke: hsl(0deg 100% 50%);
+    fill: hsl(0deg 100% 50%);
+}
+
+.favorite-label .action {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+}
+
+.favorite-label .action span {
+    grid-column-start: 1;
+    grid-row-start: 1;
+    transition: all 0.5s;
+}
+
+.favorite-checkbox:not(:checked) + .favorite-label .option-add {
+    opacity: 1;
+}
+
+.favorite-checkbox:checked + .favorite-label .option-add {
+    transform: translateY(-100%); /* Déplacez le texte vers le haut pour le cacher. */
+    opacity: 0;
+}
+
+.favorite-checkbox:not(:checked) + .favorite-label .option-remove {
+    transform: translateY(100%); /* Déplacez le texte vers le bas pour le cacher. */
+    opacity: 0;
+}
+
+.favorite-checkbox:checked + .favorite-label .option-remove {
+    opacity: 1; /* Montrez le texte lorsque la checkbox est cochée. */
+}
+
+.option-add, .option-remove {
+    transition: opacity 0.3s ease;
+    opacity: 0;
+}
+
+.favorite-checkbox:checked + .favorite-label .option-remove,
+.favorite-checkbox:not(:checked) + .favorite-label .option-add {
+    opacity: 1;
+}
